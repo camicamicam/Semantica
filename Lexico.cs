@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Sintaxis_1
+namespace Semantica
 {
     public class Lexico : Token, IDisposable
     {
@@ -53,6 +53,7 @@ namespace Sintaxis_1
         };
         public Lexico() // Constructor
         {
+            linea = 0;
             log = new StreamWriter("prueba.log");
             log.AutoFlush = true;
             asm = new StreamWriter("prueba.asm");
@@ -69,6 +70,7 @@ namespace Sintaxis_1
         }
         public Lexico(string nombre) // Constructor
         {
+            linea = 0;
             log = new StreamWriter(Path.GetFileNameWithoutExtension(nombre) + ".log");
             log.AutoFlush = true;
             asm = new StreamWriter(Path.GetFileNameWithoutExtension(nombre) + ".asm");
@@ -222,7 +224,6 @@ namespace Sintaxis_1
                 case 24: setClasificacion(Tipos.Inicio); break;
                 case 25: setClasificacion(Tipos.Fin); break;
                 case 26: setClasificacion(Tipos.Caracter); break;
-                case 31: setClasificacion(Tipos.Moneda); break;
 
             }
         }
@@ -264,10 +265,6 @@ namespace Sintaxis_1
                 else if (getClasificacion() == Tipos.OpFactor)
                 {
                     throw new Error(" Se espera un cierre de comentario\n " + buffer, log);
-                }
-                else if (getClasificacion() == Tipos.Moneda)
-                {
-                    throw new Error(" Se espera un digito\n " + buffer, log);
                 }
             }
             setContenido(buffer);
